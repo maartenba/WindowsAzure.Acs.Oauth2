@@ -4,3 +4,12 @@ obj
 
 # mstest test results
 TestResults
+
+# ReSharper
+_ReSharper*
+
+# Published files
+publish
+
+# User files
+*.suo
