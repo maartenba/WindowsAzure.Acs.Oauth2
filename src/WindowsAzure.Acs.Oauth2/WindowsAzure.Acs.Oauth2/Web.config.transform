@@ -3,6 +3,7 @@
   <appSettings>
     <add key="WindowsAzure.OAuth.SwtSigningKey" value="[your 256-bit symmetric key configured in the ACS]" />
     <add key="WindowsAzure.OAuth.RelyingPartyName" value="[your relying party name configured in the ACS]" />
+    <add key="WindowsAzure.OAuth.RelyingPartyRealm" value="[your relying party realm configured in the ACS]" />
     <add key="WindowsAzure.OAuth.ServiceNamespace" value="[your ACS service namespace]" />
     <add key="WindowsAzure.OAuth.ServiceNamespaceManagementUserName" value="ManagementClient" />
     <add key="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey" value="[your ACS service management key]" />
