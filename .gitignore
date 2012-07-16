@@ -13,3 +13,7 @@ publish
 
 # User files
 *.suo
+
+# NuGet packages
+packages*
+!repositories.config

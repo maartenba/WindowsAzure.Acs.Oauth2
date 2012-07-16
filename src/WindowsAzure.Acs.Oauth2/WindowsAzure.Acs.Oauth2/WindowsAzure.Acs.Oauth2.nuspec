@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <version>$version$</version>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>http://github.com/maartenba/WindowsAzure.Acs.Oauth2/blob/master/LICENSE.md</licenseUrl>
+    <projectUrl>http://github.com/maartenba/WindowsAzure.Acs.Oauth2</projectUrl>
+    <id>$id$</id>
+    <title>$title$</title>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Oauth2 delegation through Windows Azure Access Control Service for ASP.NET Web API.</description>
+    <summary>Oauth2 delegation through Windows Azure Access Control Service for ASP.NET Web API.</summary>
+    <copyright>Copyright 2012 Maarten Balliauw</copyright>
+    <tags>oauth oauth2 acs windowsazure azure access control service wif api rest authorization authorize</tags>
+  </metadata>
+</package>
