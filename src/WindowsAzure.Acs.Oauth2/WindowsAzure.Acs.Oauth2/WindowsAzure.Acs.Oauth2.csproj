@@ -97,7 +97,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App_Start\AppStart_OAuth2API.cs.pp" />
+    <Content Include="App_Start\AppStart_OAuth2API.cs.pp" />
     <Compile Include="AuthorizationServer.cs" />
     <Compile Include="AuthorizationServerIdentity.cs" />
     <Compile Include="AuthorizationServerViewModel.cs" />
