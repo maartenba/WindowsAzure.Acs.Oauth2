@@ -38,7 +38,40 @@ Next to these files, the following entries are added to your *Web.config* file:
 These settings should be configured based on the Windows Azure Access Control settings.
 
 ### Windows Azure Access Control Settings
-*todo*
+Ensure you have a Windows Azure Access Control namespace created through the [Windows Azure Management portal](http://windows.azure.com). Log in to the ACS management dashboard and configure the following:
+
+- Under *Relying Party Applications*, create a new Relying Party Application. A Relying Party Application is an application which trusts the OAuth2 tokens created by ACS. In most cases, the project in which your API resides will be a Relying Party.
+
+    Give it a meaningful name (which you can add in the *WindowsAzure.OAuth.RelyingPartyName* setting of your *Web.config*.
+    
+    Configure the Realm. This is can be any URL you want, but is usually identical to the root URL of your API. Also add it in the *WindowsAzure.OAuth.RelyingPartyRealm* setting of your *Web.config*.
+    
+    For Return URL, enter the root URL of your API.
+    
+    The Token Format to be used is SWT. Define the token lifetime to any value you want. Many API's use 5 minutes (300 sec), more works too.
+    
+    Create a token signing key. This can be generated and added in the *WindowsAzure.OAuth.SwtSigningKey* setting of your *Web.config*. Token validity is your call. Any date will do, but note that if the tokn expires you will have to update your API's *Web.config* again.
+    
+    Create a new Rule Group.
+    
+    Save.
+- Under *Rule Groups*, find the Rule Group that was just created. It is important to add one Rule wich passes through any information related to a user to your API.
+
+    Click *Add*, for Input Claim Issuer select *Access Control Service*.
+    
+    Leave all other fields as-is. This will pass-through any information related to the user to your application.
+    
+    Save.
+    
+    Under *Edit Rule Group*, Save again.
+    
+Your ACS configuration is now completed. However, our *Web.config* configuration isn't. Keep the ACS management dashboard open and find the following values:
+
+- Find your Service Namespace. This is usually the part before .accesscontrol.windows.net in the URL. Enter it in the *WindowsAzure.OAuth.ServiceNamespace* setting of your *Web.config*. 
+
+- Under Management Service, find the management service owner name. Usually, this is *ManagementClient* and it is already configured in the *WindowsAzure.OAuth.ServiceNamespaceManagementUserName* setting of your *Web.config*. 
+
+- Find the management service password. Copy it into the *WindowsAzure.OAuth.ServiceNamespaceManagementUserKey* setting of your *Web.config*. 
 
 ## Usage
 ### Registering a client application
