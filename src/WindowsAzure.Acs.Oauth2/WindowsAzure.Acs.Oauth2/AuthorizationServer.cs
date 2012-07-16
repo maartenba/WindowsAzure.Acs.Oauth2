@@ -14,7 +14,7 @@ namespace WindowsAzure.Acs.Oauth2
     /// <summary>
     /// AuthorizationServer class.
     /// </summary>
-    [Authorize]
+    [EnsureOAuthMessageIntercepted, Authorize]
     public class AuthorizationServer
         : Controller
     {
@@ -70,7 +70,7 @@ namespace WindowsAzure.Acs.Oauth2
         /// </summary>
         /// <param name="httpContext"> The current HttpContext.</param>
         /// <returns>Returns the OAuth message created from the incoming request.</returns>
-        protected virtual OAuthMessage ParseIncomingRequest(HttpContextBase httpContext)
+        public virtual OAuthMessage ParseIncomingRequest(HttpContextBase httpContext)
         {
             var serializer = new OAuthMessageSerializer();
             var message = serializer.Read(httpContext);
@@ -82,7 +82,7 @@ namespace WindowsAzure.Acs.Oauth2
         /// </summary>
         /// <param name="httpContext">The HTTP context.</param>
         /// <returns>Returns the OAuth message created from the incoming request.</returns>
-        protected OAuthMessage StoreIncomingRequest(HttpContextBase httpContext)
+        public OAuthMessage StoreIncomingRequest(HttpContextBase httpContext)
         {
             var message = ParseIncomingRequest(HttpContext);
             TempData[OauthMessageKey] = message;

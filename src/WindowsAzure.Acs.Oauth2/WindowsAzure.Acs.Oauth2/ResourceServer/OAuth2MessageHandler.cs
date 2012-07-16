@@ -100,6 +100,11 @@ namespace WindowsAzure.Acs.Oauth2.ResourceServer
                 throw new ArgumentNullException("request");
             }
 
+            if (!request.Headers.Contains("Authorization"))
+            {
+                return null;
+            }
+
             string bearer = "Bearer";
             string authHeader = request.Headers.GetValues("Authorization").FirstOrDefault();
             string token = null;

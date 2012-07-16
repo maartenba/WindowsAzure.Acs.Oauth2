@@ -102,6 +102,7 @@
     <Compile Include="AuthorizationServerIdentity.cs" />
     <Compile Include="AuthorizationServerViewModel.cs" />
     <Compile Include="ApplicationRegistrationService.cs" />
+    <Compile Include="EnsureOAuthMessageInterceptedAttribute.cs" />
     <Compile Include="Protocol\Swt\SimpleWebToken.cs" />
     <Compile Include="Protocol\Swt\SimpleWebTokenHandler.cs" />
     <Compile Include="RequestMessageExtensions.cs" />
