@@ -113,20 +113,10 @@ Your ACS configuration is now completed. However, our *Web.config* configuration
 
 - Find the management service password. Copy it into the *WindowsAzure.OAuth.ServiceNamespaceManagementUserKey* setting of your *Web.config*. 
 
-## API documentation defaults
-You can use the following entries in your API documentation as these are the defaults for WindowsAzure.Acs.Oauth2.
-
-
-
-{0}?client_id={1}&redirect_uri={2}&scope={3}&response_type=code
-The application itself will have to ask user consent before being able to access your application.
-
-
-
-This is a description of the OAuth flow from 3rd party web sites.
-
 ## API application flow
 You can use the following entries in your API documentation as these are the defaults for WindowsAzure.Acs.Oauth2.
+
+This is a description of the OAuth flow from 3rd party web sites.
 
 ### 1. Redirect users to request access to your API
 
