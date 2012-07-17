@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
-    <version>$version$</version>
+    <version>1.0.0-alpha66</version>
     <authors>$author$</authors>
     <owners>$author$</owners>
     <licenseUrl>http://github.com/maartenba/WindowsAzure.Acs.Oauth2/blob/master/LICENSE.md</licenseUrl>

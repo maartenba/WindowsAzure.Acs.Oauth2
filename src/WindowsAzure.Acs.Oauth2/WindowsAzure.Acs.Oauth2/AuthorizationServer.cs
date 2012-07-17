@@ -72,6 +72,12 @@ namespace WindowsAzure.Acs.Oauth2
         /// <returns>Returns the OAuth message created from the incoming request.</returns>
         public virtual OAuthMessage ParseIncomingRequest(HttpContextBase httpContext)
         {
+            if (TempData[OauthMessageKey] != null)
+            {
+                TempData.Keep(OauthMessageKey);
+                return TempData[OauthMessageKey] as OAuthMessage;
+            }
+
             var serializer = new OAuthMessageSerializer();
             var message = serializer.Read(httpContext);
             return message;
