@@ -14,7 +14,7 @@ namespace WindowsAzure.Acs.Oauth2
     /// <summary>
     /// AuthorizationServer class.
     /// </summary>
-    [Authorize]
+    [EnsureOAuthMessageIntercepted, Authorize]
     public class AuthorizationServer
         : Controller
     {
@@ -70,7 +70,7 @@ namespace WindowsAzure.Acs.Oauth2
         /// </summary>
         /// <param name="httpContext"> The current HttpContext.</param>
         /// <returns>Returns the OAuth message created from the incoming request.</returns>
-        protected virtual OAuthMessage ParseIncomingRequest(HttpContextBase httpContext)
+        public virtual OAuthMessage ParseIncomingRequest(HttpContextBase httpContext)
         {
             var serializer = new OAuthMessageSerializer();
             var message = serializer.Read(httpContext);
@@ -82,7 +82,7 @@ namespace WindowsAzure.Acs.Oauth2
         /// </summary>
         /// <param name="httpContext">The HTTP context.</param>
         /// <returns>Returns the OAuth message created from the incoming request.</returns>
-        protected OAuthMessage StoreIncomingRequest(HttpContextBase httpContext)
+        public OAuthMessage StoreIncomingRequest(HttpContextBase httpContext)
         {
             var message = ParseIncomingRequest(HttpContext);
             TempData[OauthMessageKey] = message;
@@ -97,8 +97,12 @@ namespace WindowsAzure.Acs.Oauth2
         protected virtual AuthorizationServerViewModel BuildModel(OAuthMessage message)
         {
             var model = new AuthorizationServerViewModel();
-            model.ApplicationName = ApplicationRegistrationService.GetApplicationName(message.Parameters["client_id"]);
-            model.ApplicationUrl = message.Parameters["redirect_uri"] != null ? new Uri(message.Parameters["redirect_uri"]) : null;
+
+            var applicationRegistration = ApplicationRegistrationService.GetApplication(message.Parameters["client_id"]);
+
+            model.ApplicationName = applicationRegistration.ApplicationName;
+            model.ApplicationUrl = applicationRegistration.ApplicationUrl;
+
             return model;
         }
 

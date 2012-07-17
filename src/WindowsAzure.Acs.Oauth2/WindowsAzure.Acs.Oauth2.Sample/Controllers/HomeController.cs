@@ -8,8 +8,8 @@ using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using WindowsAzure.Acs.Oauth2.Client;
 using WindowsAzure.Acs.Oauth2.Protocol;
-using WindowsAzure.Acs.Oauth2.Protocol.Client;
 
 namespace WindowsAzure.Acs.Oauth2.Sample.Controllers
 {

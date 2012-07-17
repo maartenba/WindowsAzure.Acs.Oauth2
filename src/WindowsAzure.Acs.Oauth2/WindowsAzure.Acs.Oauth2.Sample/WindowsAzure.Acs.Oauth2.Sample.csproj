@@ -184,6 +184,10 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\WindowsAzure.Acs.Oauth2.Client\WindowsAzure.Acs.Oauth2.Client.csproj">
+      <Project>{40D13A9B-E2E5-40F3-B240-B531A749D0B2}</Project>
+      <Name>WindowsAzure.Acs.Oauth2.Client</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WindowsAzure.Acs.Oauth2\WindowsAzure.Acs.Oauth2.csproj">
       <Project>{3051F268-B03F-42AE-A06C-1D8DD751BDBF}</Project>
       <Name>WindowsAzure.Acs.Oauth2</Name>

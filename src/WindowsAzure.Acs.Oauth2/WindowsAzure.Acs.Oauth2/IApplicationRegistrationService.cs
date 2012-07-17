@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using WindowsAzure.Acs.Oauth2.Protocol;
 
 namespace WindowsAzure.Acs.Oauth2
@@ -34,11 +35,27 @@ namespace WindowsAzure.Acs.Oauth2
         void RemoveApplication(string clientId);
 
         /// <summary>
-        /// Gets the name of the application.
+        /// Gets an application.
         /// </summary>
         /// <param name="clientId">The client id.</param>
         /// <returns></returns>
-        string GetApplicationName(string clientId);
+        ApplicationRegistration GetApplication(string clientId);
+
+        /// <summary>
+        /// Gets the delegated applications.
+        /// </summary>
+        /// <param name="nameIdentifier">The name identifier.</param>
+        /// <param name="identityProvider">The identity provider.</param>
+        /// <returns></returns>
+        IEnumerable<ApplicationRegistration> GetDelegatedApplications(string nameIdentifier, string identityProvider);
+
+        /// <summary>
+        /// Removes the delegation.
+        /// </summary>
+        /// <param name="clientId">The client id.</param>
+        /// <param name="nameIdentifier">The name identifier.</param>
+        /// <param name="identityProvider">The identity provider.</param>
+        void RemoveDelegation(string clientId, string nameIdentifier, string identityProvider);
 
         /// <summary>
         /// This method validates the incoming request.

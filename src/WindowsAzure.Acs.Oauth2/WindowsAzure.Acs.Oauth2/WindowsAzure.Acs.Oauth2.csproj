@@ -98,10 +98,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Start\AppStart_OAuth2API.cs.pp" />
+    <Compile Include="ApplicationRegistration.cs" />
     <Compile Include="AuthorizationServer.cs" />
     <Compile Include="AuthorizationServerIdentity.cs" />
     <Compile Include="AuthorizationServerViewModel.cs" />
     <Compile Include="ApplicationRegistrationService.cs" />
+    <Compile Include="EnsureOAuthMessageInterceptedAttribute.cs" />
     <Compile Include="Protocol\Swt\SimpleWebToken.cs" />
     <Compile Include="Protocol\Swt\SimpleWebTokenHandler.cs" />
     <Compile Include="RequestMessageExtensions.cs" />
@@ -123,7 +125,6 @@
     <Compile Include="Protocol\AccessTokenResponse.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Protocol\Client\SimpleOAuth2Client.cs" />
     <Compile Include="Protocol\EndUserAuthorizationFailedResponse.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -165,7 +166,12 @@
     <Content Include="Web.config.transform">
       <SubType>Designer</SubType>
     </Content>
-    <None Include="WindowsAzure.Acs.Oauth2.nuspec" />
+    <Content Include="..\..\..\README.md">
+      <Link>App_Readme\README.md</Link>
+    </Content>
+    <None Include="WindowsAzure.Acs.Oauth2.nuspec">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

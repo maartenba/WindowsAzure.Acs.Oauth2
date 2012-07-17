@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Services.Client;
 using System.Linq;
@@ -180,11 +181,11 @@ namespace WindowsAzure.Acs.Oauth2
         }
 
         /// <summary>
-        /// Gets the name of the application.
+        /// Gets an application.
         /// </summary>
         /// <param name="clientId">The client id.</param>
         /// <returns></returns>
-        public string GetApplicationName(string clientId)
+        public ApplicationRegistration GetApplication(string clientId)
         {
             var client = CreateManagementServiceClient();
 
@@ -195,7 +196,76 @@ namespace WindowsAzure.Acs.Oauth2
                     "An application with client_id '{0}' could not be found.", clientId));
             }
 
-            return serviceIdentity.Description;
+            return new ApplicationRegistration()
+                       {
+                           ApplicationName = serviceIdentity.Description,
+                           ApplicationUrl = new Uri(serviceIdentity.RedirectAddress),
+                           ClientId = serviceIdentity.Name
+                       };
+        }
+
+        /// <summary>
+        /// Gets the delegated applications.
+        /// </summary>
+        /// <param name="nameIdentifier">The name identifier.</param>
+        /// <param name="identityProvider">The identity provider.</param>
+        /// <returns></returns>
+        public IEnumerable<ApplicationRegistration> GetDelegatedApplications(string nameIdentifier, string identityProvider)
+        {
+            var client = CreateManagementServiceClient();
+
+            var delegations = client.Delegations.Where(d => d.NameIdentifier == nameIdentifier);
+            if (!string.IsNullOrEmpty(identityProvider))
+            {
+                delegations = delegations.Where(d => d.IdentityProvider == identityProvider);
+            }
+
+            var applicationRegistrations = new List<ApplicationRegistration>();
+            foreach (var delegation in delegations)
+            {
+                var serviceIdentity = client.ServiceIdentities.Where(si => si.Id == delegation.ServiceIdentityId).ToList().FirstOrDefault();
+                if (serviceIdentity != null)
+                {
+
+                    applicationRegistrations.Add(new ApplicationRegistration()
+                                                     {
+                                                         ApplicationName = serviceIdentity.Description,
+                                                         ApplicationUrl = new Uri(serviceIdentity.RedirectAddress),
+                                                         ClientId = serviceIdentity.Name
+                                                     });
+                }
+            }
+
+            return applicationRegistrations;
+        }
+
+        /// <summary>
+        /// Removes the delegation.
+        /// </summary>
+        /// <param name="clientId">The client id.</param>
+        /// <param name="nameIdentifier">The name identifier.</param>
+        /// <param name="identityProvider">The identity provider.</param>
+        public void RemoveDelegation(string clientId, string nameIdentifier, string identityProvider)
+        {
+            var client = CreateManagementServiceClient();
+
+            var serviceIdentity = client.ServiceIdentities.Where(si => si.Name == clientId).ToList().FirstOrDefault();
+            if (serviceIdentity != null)
+            {
+                var delegations = client.Delegations.Where(d => d.ServiceIdentityId == serviceIdentity.Id && d.NameIdentifier == nameIdentifier);
+                if (!string.IsNullOrEmpty(identityProvider))
+                {
+                    delegations = delegations.Where(d => d.IdentityProvider == identityProvider);
+                }
+
+                var delegation = delegations.FirstOrDefault();
+
+                if (delegation != null)
+                {
+                    client.DeleteObject(delegation);
+                    client.SaveChanges();
+                }
+            }
         }
 
         /// <summary>

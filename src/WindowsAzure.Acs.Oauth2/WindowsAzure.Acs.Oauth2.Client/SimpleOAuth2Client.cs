@@ -3,8 +3,9 @@ using System.IO;
 using System.Net;
 using System.Security.Authentication;
 using System.Text;
+using WindowsAzure.Acs.Oauth2.Protocol;
 
-namespace WindowsAzure.Acs.Oauth2.Protocol.Client
+namespace WindowsAzure.Acs.Oauth2.Client
 {
     /// <summary>
     /// SimpleOAuth2Client.
