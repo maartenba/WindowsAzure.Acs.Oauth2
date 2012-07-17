@@ -2,7 +2,8 @@ using System;
 
 namespace WindowsAzure.Acs.Oauth2.Protocol
 {
-    public class AccessTokenRequest 
+    [Serializable]
+    public class AccessTokenRequest
         : OAuthMessage
     {
         public string GrantType

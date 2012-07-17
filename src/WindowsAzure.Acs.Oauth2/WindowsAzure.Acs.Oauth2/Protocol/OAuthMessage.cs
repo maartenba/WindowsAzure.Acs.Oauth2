@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 
 namespace WindowsAzure.Acs.Oauth2.Protocol
 {
+    [Serializable]
     public abstract class OAuthMessage
     {
         private NameValueCollection parameters = new NameValueCollection();

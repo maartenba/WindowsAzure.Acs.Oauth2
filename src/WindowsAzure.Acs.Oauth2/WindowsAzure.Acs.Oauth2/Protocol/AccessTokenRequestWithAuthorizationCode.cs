@@ -2,6 +2,7 @@ using System;
 
 namespace WindowsAzure.Acs.Oauth2.Protocol
 {
+    [Serializable]
     public class AccessTokenRequestWithAuthorizationCode
         : AccessTokenRequest
     {

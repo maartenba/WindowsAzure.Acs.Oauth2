@@ -2,7 +2,9 @@ using System;
 
 namespace WindowsAzure.Acs.Oauth2.Protocol
 {
-    public class EndUserAuthorizationFailedResponse : OAuthMessage
+    [Serializable]
+    public class EndUserAuthorizationFailedResponse
+        : OAuthMessage
     {
         public string Error
         {
