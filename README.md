@@ -57,7 +57,7 @@ As *WindowsAzure.Acs.Oauth2* is currently in alpha status, you will have to regi
 This command will bring some dependencies to your project and installs the following source files:
 - App_Start/AppStart_OAuth2API.cs - Makes sure that OAuth2-signed SWT tokens are transformed into a *ClaimsIdentity* for use in your API.
 
-- Controllers/[AuthorizeController]().cs - A standard authorization server implementation which is configured by the *Web.config* settings. You can override certain methods here, for example if you want to show additional application information on the consent page.
+- Controllers/AuthorizeController.cs - A standard authorization server implementation which is configured by the *Web.config* settings. You can override certain methods here, for example if you want to show additional application information on the consent page.
 
 - Views/Shared/_AuthorizationServer.cshtml - A default consent page. This can be customized at will.
 
