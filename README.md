@@ -132,7 +132,7 @@ This is a description of the OAuth flow from 3rd party web sites.
  - **scope**
  
      *Required* string - The API access scope you wish to receive. This is typically the root URL of the API.
-- **response_type**
+ - **response_type**
  
      *Required* string - The format of the expected response. Recommended value is "token".
 	 
