@@ -172,23 +172,23 @@ namespace WindowsAzure.Acs.Oauth2.Client.WinRT.Protocol
             }
 
             OAuthMessage request = null;
-            if (parameters["response_type"] == "code" || parameters["response_type"] == "token")
+            if (parameters.ContainsKey("response_type") && (parameters["response_type"] == "code" || parameters["response_type"] == "token"))
             {
                 request = new EndUserAuthorizationRequest(baseUri);
             }
-            if (!string.IsNullOrEmpty(parameters["code"]) || (!string.IsNullOrEmpty(parameters["access_token"]) && string.IsNullOrEmpty(parameters["refresh_token"])))
+            if ((parameters.ContainsKey("code")  && !string.IsNullOrEmpty(parameters["code"])) || (parameters.ContainsKey("access_token") && !string.IsNullOrEmpty(parameters["access_token"]) && parameters.ContainsKey("refresh_token")  && string.IsNullOrEmpty(parameters["refresh_token"])))
             {
                 request = new EndUserAuthorizationResponse(baseUri);
             }
-            if (!string.IsNullOrEmpty(parameters["error"]))
+            if (parameters.ContainsKey("error")  && !string.IsNullOrEmpty(parameters["error"]))
             {
                 request = new EndUserAuthorizationFailedResponse(baseUri);
             }
-            if (!string.IsNullOrEmpty(parameters["grant_type"]) && parameters["grant_type"] == "authorization_code")
+            if (parameters.ContainsKey("grant_type")  && !string.IsNullOrEmpty(parameters["grant_type"]) && parameters["grant_type"] == "authorization_code")
             {
                 request = new AccessTokenRequestWithAuthorizationCode(baseUri);
             }
-            if (!string.IsNullOrEmpty(parameters["access_token"]))
+            if (parameters.ContainsKey("access_token")  && !string.IsNullOrEmpty(parameters["access_token"]))
             {
                 request = new AccessTokenResponse(baseUri);
             }

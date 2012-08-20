@@ -5,6 +5,7 @@ using System.Net;
 using System.Security;
 using System.ServiceModel.Security;
 using System.Text;
+using System.Threading.Tasks;
 using WindowsAzure.Acs.Oauth2.Client.WinRT.Protocol;
 
 namespace WindowsAzure.Acs.Oauth2.Client.WinRT
@@ -118,7 +119,7 @@ namespace WindowsAzure.Acs.Oauth2.Client.WinRT
         /// Authorizes the specified refresh token.
         /// </summary>
         /// <param name="refreshToken">The refresh token.</param>
-        public async void Authorize(string refreshToken)
+        public async Task AuthorizeAsync(string refreshToken)
         {
             var authorizeRequest = BuildAccessTokenRequest(refreshToken);
 
@@ -164,7 +165,7 @@ namespace WindowsAzure.Acs.Oauth2.Client.WinRT
         /// Appends the access token to.
         /// </summary>
         /// <param name="webRequest">The web request.</param>
-        public void AppendAccessTokenTo(HttpWebRequest webRequest)
+        public async Task AppendAccessTokenToAsync(HttpWebRequest webRequest)
         {
             if (CurrentAccessToken == null)
             {
@@ -173,7 +174,7 @@ namespace WindowsAzure.Acs.Oauth2.Client.WinRT
 
             if (DateTime.UtcNow.AddSeconds(-15) < LastAccessTokenRefresh.AddSeconds(CurrentAccessToken.ExpiresIn))
             {
-                Authorize(CurrentAccessToken.RefreshToken);
+                await AuthorizeAsync(CurrentAccessToken.RefreshToken);
             }
 
             webRequest.Headers[HttpRequestHeader.Authorization] = "Bearer " + Convert.ToBase64String(Encoding.UTF8.GetBytes(CurrentAccessToken.AccessToken));
