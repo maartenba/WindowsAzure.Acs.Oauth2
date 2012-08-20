@@ -17,3 +17,4 @@ publish
 # NuGet packages
 packages*
 !repositories.config
+!packages.config
