@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using Microsoft.IdentityModel.Claims;
+using Microsoft.IdentityModel.Web;
 using WindowsAzure.Acs.Oauth2.Protocol.Swt;
 
 namespace WindowsAzure.Acs.Oauth2.ResourceServer
@@ -152,6 +153,21 @@ namespace WindowsAzure.Acs.Oauth2.ResourceServer
                 {
                     tokenValid = true;
 
+                    // push it through the WIF pipeline
+                    try
+                    {
+                        var cam = FederatedAuthentication.ServiceConfiguration.ClaimsAuthenticationManager;
+                        if (cam != null)
+                        {
+                            claimsPrincipal = cam.Authenticate("", claimsPrincipal);
+                        }
+                    }
+                    catch (NullReferenceException)
+                    {
+                        // swallow intentionally
+                    }
+
+                    // assign to threads
                     if (HttpContext.Current != null)
                     {
                         HttpContext.Current.User = claimsPrincipal;
