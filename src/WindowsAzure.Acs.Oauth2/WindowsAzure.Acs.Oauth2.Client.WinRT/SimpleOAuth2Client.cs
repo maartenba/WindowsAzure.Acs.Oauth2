@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Security;
 using System.ServiceModel.Security;
 using System.Text;
@@ -123,49 +126,38 @@ namespace WindowsAzure.Acs.Oauth2.Client.WinRT
         {
             var authorizeRequest = BuildAccessTokenRequest(refreshToken);
 
+            var req = new HttpClient();
+            var response = await req.PostAsync(authorizeRequest.BaseUri, new FormUrlEncodedContent(authorizeRequest.Parameters));
+
             var serializer = new OAuthMessageSerializer();
-            var encodedQueryFormat = serializer.GetFormEncodedQueryFormat(authorizeRequest);
 
-            HttpWebRequest httpWebRequest = WebRequest.Create(authorizeRequest.BaseUri) as HttpWebRequest;
-            httpWebRequest.Method = "POST";
-            httpWebRequest.ContentType = "application/x-www-form-urlencoded";
-            StreamWriter streamWriter = new StreamWriter(await httpWebRequest.GetRequestStreamAsync());
-            streamWriter.Write(encodedQueryFormat);
+            var deserializedMessage = await serializer.Read(response);
 
-            try
+            var message = deserializedMessage as AccessTokenResponse;
+            if (message != null)
             {
-                var message = serializer.Read(await httpWebRequest.GetResponseAsync() as HttpWebResponse) as AccessTokenResponse;
-                if (message != null)
-                {
-                    CurrentAccessToken = message;
-                    LastAccessTokenRefresh = DateTime.UtcNow;
-                }
+                CurrentAccessToken = message;
+                LastAccessTokenRefresh = DateTime.UtcNow;
             }
-            catch (WebException webex)
+
+            var endUserAuthorizationFailedResponse = deserializedMessage as EndUserAuthorizationFailedResponse;
+            if (endUserAuthorizationFailedResponse != null)
             {
-                var message = serializer.Read(webex.Response as HttpWebResponse);
+                throw new SecurityException(endUserAuthorizationFailedResponse.ErrorDescription);
+            }
 
-                var endUserAuthorizationFailedResponse = message as EndUserAuthorizationFailedResponse;
-                if (endUserAuthorizationFailedResponse != null)
-                {
-                    throw new SecurityException(endUserAuthorizationFailedResponse.ErrorDescription);
-                }
-
-                var userAuthorizationFailedResponse = message as ResourceAccessFailureResponse;
-                if (userAuthorizationFailedResponse != null)
-                {
-                    throw new SecurityException(userAuthorizationFailedResponse.ErrorDescription);
-                }
-
-                throw;
+            var userAuthorizationFailedResponse = deserializedMessage as ResourceAccessFailureResponse;
+            if (userAuthorizationFailedResponse != null)
+            {
+                throw new SecurityException(userAuthorizationFailedResponse.ErrorDescription);
             }
         }
 
         /// <summary>
         /// Appends the access token to.
         /// </summary>
-        /// <param name="webRequest">The web request.</param>
-        public async Task AppendAccessTokenToAsync(HttpWebRequest webRequest)
+        /// <param name="client">The client.</param>
+        public async Task AppendAccessTokenToAsync(HttpClient client)
         {
             if (CurrentAccessToken == null)
             {
@@ -177,7 +169,7 @@ namespace WindowsAzure.Acs.Oauth2.Client.WinRT
                 await AuthorizeAsync(CurrentAccessToken.RefreshToken);
             }
 
-            webRequest.Headers[HttpRequestHeader.Authorization] = "Bearer " + Convert.ToBase64String(Encoding.UTF8.GetBytes(CurrentAccessToken.AccessToken));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Convert.ToBase64String(Encoding.UTF8.GetBytes(CurrentAccessToken.AccessToken)));
         }
 
         private AccessTokenRequestWithAuthorizationCode BuildAccessTokenRequest(string refreshToken)

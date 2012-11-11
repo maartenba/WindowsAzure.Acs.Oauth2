@@ -2,19 +2,23 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace WindowsAzure.Acs.Oauth2.Client.WinRT.Protocol
 {
     public class OAuthMessageSerializer
     {
-        public virtual OAuthMessage Read(HttpWebResponse response)
+        public async Task<OAuthMessage> Read(HttpResponseMessage response)
         {
             if (response == null)
             {
                 throw new ArgumentNullException("response");
             }
-            return this.Read(response.Method, response.ContentType, response.ResponseUri, response.GetResponseStream());
+
+            var responseStream = await response.Content.ReadAsStreamAsync();
+            return this.Read(response.RequestMessage.Method.ToString(), response.Content.Headers.ContentType.MediaType, response.RequestMessage.RequestUri, responseStream);
         }
 
         public virtual OAuthMessage Read(string httpMethod, string httpContentType, Uri requestUri, System.IO.Stream incomingStream)
@@ -284,7 +288,7 @@ namespace WindowsAzure.Acs.Oauth2.Client.WinRT.Protocol
                     }
                     strBuilder.Append(string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0}={1}", new object[]
                                                                                                                       {
-                                                                                                                          WebUtility.UrlEncode(key), 
+                                                                                                                          key, 
                                                                                                                           WebUtility.UrlEncode(message.Parameters[key])
                                                                                                                       }));
                     skipDelimiter = false;
