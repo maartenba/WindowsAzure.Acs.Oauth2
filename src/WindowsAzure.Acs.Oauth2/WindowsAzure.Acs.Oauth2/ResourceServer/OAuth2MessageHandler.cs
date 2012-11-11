@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IdentityModel.Tokens;
 using System.Linq;
@@ -21,6 +22,7 @@ namespace WindowsAzure.Acs.Oauth2.ResourceServer
         private readonly string _realm;
         private string _issuer;
         private string _tokenSigningKey;
+        private List<IAuthenticationStep> authenticationPipeline = new List<IAuthenticationStep>();
 
         public OAuth2MessageHandler()
             : this(ConfigurationManager.AppSettings["WindowsAzure.OAuth.RelyingPartyRealm"],
@@ -38,6 +40,16 @@ namespace WindowsAzure.Acs.Oauth2.ResourceServer
             _realm = realm;
             _issuer = issuer;
             _tokenSigningKey = tokenSigningKey;
+        }
+
+        public void AddAuthenticationStep(IAuthenticationStep step)
+        {
+            authenticationPipeline.Add(step);
+        }
+
+        public void SetAuthenticationPipeline(IEnumerable<IAuthenticationStep> pipeline)
+        {
+            authenticationPipeline = pipeline.ToList();
         }
 
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
@@ -153,18 +165,10 @@ namespace WindowsAzure.Acs.Oauth2.ResourceServer
                 {
                     tokenValid = true;
 
-                    // push it through the WIF pipeline
-                    try
+                    // push it through the pipeline
+                    foreach (var step in authenticationPipeline)
                     {
-                        var cam = FederatedAuthentication.ServiceConfiguration.ClaimsAuthenticationManager;
-                        if (cam != null)
-                        {
-                            claimsPrincipal = cam.Authenticate("", claimsPrincipal);
-                        }
-                    }
-                    catch (NullReferenceException)
-                    {
-                        // swallow intentionally
+                        claimsPrincipal = step.Authenticate(token, claimsPrincipal);
                     }
 
                     // assign to threads

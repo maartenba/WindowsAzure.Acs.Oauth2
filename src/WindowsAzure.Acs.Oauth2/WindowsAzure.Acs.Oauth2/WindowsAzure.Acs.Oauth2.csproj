@@ -110,6 +110,8 @@
     <Compile Include="Protocol\Swt\SimpleWebTokenHandler.cs" />
     <Compile Include="RequestMessageExtensions.cs" />
     <Compile Include="ResourceServer\ExpiredTokenReceivedException.cs" />
+    <Compile Include="ResourceServer\IAuthenticationStep.cs" />
+    <Compile Include="ResourceServer\IdentityFoundationAuthenticationStep.cs" />
     <Compile Include="ResourceServer\InvalidTokenReceivedException.cs" />
     <Compile Include="ResourceServer\OAuth2MessageHandler.cs" />
     <Compile Include="ResourceServer\RequestMessageExtensions.cs" />
