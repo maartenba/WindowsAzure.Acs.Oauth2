@@ -99,9 +99,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthorizationServerBase.cs" />
+    <Compile Include="TwoLeggedAuthorizationServer.cs" />
     <Content Include="App_Start\AppStart_OAuth2API.cs.pp" />
     <Compile Include="ApplicationRegistration.cs" />
-    <Compile Include="AuthorizationServer.cs" />
+    <Compile Include="ThreeLeggedAuthorizationServer.cs" />
     <Compile Include="AuthorizationServerIdentity.cs" />
     <Compile Include="AuthorizationServerViewModel.cs" />
     <Compile Include="ApplicationRegistrationService.cs" />

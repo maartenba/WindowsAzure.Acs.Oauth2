@@ -204,6 +204,10 @@ namespace WindowsAzure.Acs.Oauth2.Protocol
             {
                 request = new AccessTokenRequestWithAuthorizationCode(baseUri);
             }
+            if (!string.IsNullOrEmpty(parameters["grant_type"]) && parameters["grant_type"] == OAuthConstants.AccessGrantType.ClientCredentials)
+            {
+                request = new AccessTokenRequest(baseUri);
+            }
             if (!string.IsNullOrEmpty(parameters["access_token"]))
             {
                 request = new AccessTokenResponse(baseUri);

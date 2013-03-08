@@ -172,17 +172,30 @@ namespace WindowsAzure.Acs.Oauth2.Client.WinRT
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Convert.ToBase64String(Encoding.UTF8.GetBytes(CurrentAccessToken.AccessToken)));
         }
 
-        private AccessTokenRequestWithAuthorizationCode BuildAccessTokenRequest(string refreshToken)
+        private AccessTokenRequest BuildAccessTokenRequest(string refreshToken)
         {
-            return new AccessTokenRequestWithAuthorizationCode(AccessTokenUri)
-                       {
-                           ClientId = ClientId,
-                           ClientSecret = ClientSecret,
-                           Scope = Scope,
-                           GrantType = "authorization_code",
-                           Code = refreshToken,
-                           RedirectUri = RedirectUri
-                       };
+            if (refreshToken != null)
+            {
+                return new AccessTokenRequestWithAuthorizationCode(AccessTokenUri)
+                    {
+                        ClientId = ClientId,
+                        ClientSecret = ClientSecret,
+                        Scope = Scope,
+                        GrantType = OAuthConstants.AccessGrantType.AuthorizationCode,
+                        Code = refreshToken,
+                        RedirectUri = RedirectUri
+                    };
+            }
+            else
+            {
+                return new AccessTokenRequest(AccessTokenUri)
+                {
+                    ClientId = ClientId,
+                    ClientSecret = ClientSecret,
+                    Scope = Scope,
+                    GrantType = OAuthConstants.AccessGrantType.ClientCredentials
+                };
+            }
         }
     }
 }
