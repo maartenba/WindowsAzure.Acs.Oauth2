@@ -21,7 +21,7 @@ namespace MvcApplication1.Controllers
             var redirectUri = "http://messagehandler/testclient";
             var scope = "http://api.messagehandler.net/";
             var authServer = "http://localhost:26073/authorize";
-            var apiRoot = "http://localhost:26073/values/";
+            var apiRoot = "http://localhost:26073/api/values/";
             var accessTokenServer = "https://messagehandler-acs-eu-west-prod.accesscontrol.windows.net/v2/OAuth2-13/";
             
             var client = new SimpleOAuth2Client(new Uri(authServer), new Uri(accessTokenServer), clientId, clientSecret, scope, new Uri(redirectUri), ClientMode.TwoLegged);

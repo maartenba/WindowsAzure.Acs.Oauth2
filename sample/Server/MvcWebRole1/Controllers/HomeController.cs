@@ -22,6 +22,7 @@ namespace MvcWebRole1.Controllers
             {
                //applicationRegistrationService.RemoveApplication("messagehandlertestclient");
                 applicationRegistrationService.RegisterApplication("messagehandlertestclient", "0A912A80-C3BD-45CE-92B7-CBDE2B39DD60", "http://messagehandler/testclient", "Messagehandler Windows 8 client");
+                applicationRegistrationService.RegisterApplication("12345", "12345", "http://messagehandler/12345", "12345");
             }
             catch
             {
