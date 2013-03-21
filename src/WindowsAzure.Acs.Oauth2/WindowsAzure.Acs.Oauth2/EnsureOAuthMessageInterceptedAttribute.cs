@@ -12,7 +12,7 @@ namespace WindowsAzure.Acs.Oauth2
 
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
-            var authorizationServer = filterContext.Controller as AuthorizationServer;
+            var authorizationServer = filterContext.Controller as AuthorizationServerBase;
             if (authorizationServer != null)
             {
                 authorizationServer.StoreIncomingRequest(filterContext.HttpContext);

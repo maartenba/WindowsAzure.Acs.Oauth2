@@ -1,0 +1,20 @@
+﻿@model WindowsAzure.Acs.Oauth2.AuthorizationServerViewModel
+
+@{
+    ViewBag.Title = string.Format("Authorize {0} to use your account?", Model.ApplicationName);
+}
+
+<h2>@ViewBag.Title</h2>
+@*<p>
+    @Model.ApplicationName by <a href="@Model.ApplicationPublisherUrl">@Model.ApplicationPublisher</a>.
+</p>*@
+<p>
+    This application will be able to <strong>access resources under your name</strong>.
+</p>
+@using (Html.BeginForm())
+{
+    <p>
+        <button type="submit" name="Authorize" value="true">Yes</button>
+        <a href="@Model.ApplicationUrl?error=usercancelled">No, take me back to the application</a>
+    </p>
+}

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="TwoLeggedOAuth" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="3" osVersion="*" schemaVersion="2012-10.1.8">
+  <Role name="MvcWebRole1">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="true" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="ygoeleve" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="MIIBnQYJKoZIhvcNAQcDoIIBjjCCAYoCAQAxggFOMIIBSgIBADAyMB4xHDAaBgNVBAMME1dpbmRvd3MgQXp1cmUgVG9vbHMCEEBkEgazEfCuSwrmTF7yhgQwDQYJKoZIhvcNAQEBBQAEggEAEzgGU37J4SKM26i8urthEEGafIzD5FvU+8t2GCdgU8INz4hS1AOD3bl3jUxpJFTVVrXw262J87rRgz8ZMF7n6yTowavkh2kHFsAmPCfE5K3KZ1qs2FPF97exh7PgX7zTDoMDebHBYvHiS7xVYPsqeKoYtfspbyfF6eAi8BP1AkhxqotITz99Mh2eiW7toyAhjHrxpIP+XGJq0YCAQqMHgVtPTuyXeHdNsLIqr6VOun6/zdPpfjUk79tGyaJzWW3TOoJfW4NlShKFMNAulcObLZ7Glfp8kIAAXJ6pheVYq4oWhrN2zkz8TJHQPxyEHdh7G1BA2uuOawV4i+EMO5Ty5DAzBgkqhkiG9w0BBwEwFAYIKoZIhvcNAwcECAs5d4r6YTL4gBDkHsLPfo0Cl92FvntedNdg" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration" value="2114-03-03T23:59:59.0000000+01:00" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteForwarder.Enabled" value="true" />
+    </ConfigurationSettings>
+    <Certificates>
+      <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="90DBE3E5A7A89D68B329E9CE67C80D3DF22B39EE" thumbprintAlgorithm="sha1" />
+    </Certificates>
+  </Role>
+</ServiceConfiguration>

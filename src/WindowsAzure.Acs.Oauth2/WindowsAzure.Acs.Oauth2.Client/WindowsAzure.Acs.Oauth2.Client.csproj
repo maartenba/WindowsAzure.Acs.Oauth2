@@ -89,6 +89,7 @@
     <Compile Include="..\WindowsAzure.Acs.Oauth2\Resources.Designer.cs">
       <Link>Resources.Designer.cs</Link>
     </Compile>
+    <Compile Include="ClientMode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleOAuth2Client.cs" />
   </ItemGroup>

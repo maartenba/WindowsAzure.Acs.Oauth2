@@ -67,7 +67,7 @@ namespace WindowsAzure.Acs.Oauth2.Protocol
             }
 
             string redirectUri = message.Parameters[OAuthConstants.RedirectUri];
-            if (redirectUri == null)
+            if (redirectUri == null && message.Parameters[OAuthConstants.GrantType] != OAuthConstants.AccessGrantType.ClientCredentials)
             {
                 throw new InvalidOperationException(OAuthConstants.RedirectUri + " cannot be null");
             }
