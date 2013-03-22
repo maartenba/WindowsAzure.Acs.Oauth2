@@ -16,13 +16,13 @@ namespace MvcApplication1.Controllers
 
         public ActionResult Index()
         {
-            var clientId = "messagehandlertestclient";
-            var clientSecret = "0A912A80-C3BD-45CE-92B7-CBDE2B39DD60";
-            var redirectUri = "http://messagehandler/testclient";
-            var scope = "http://api.messagehandler.net/";
-            var authServer = "http://localhost:26073/authorize";
-            var apiRoot = "http://localhost:26073/api/values/";
-            var accessTokenServer = "https://messagehandler-acs-eu-west-prod.accesscontrol.windows.net/v2/OAuth2-13/";
+            var clientId = "yourclientid";
+            var clientSecret = "yoursecret";
+            var redirectUri = "http://yourredirecturi/";
+            var scope = "http://yourscope/";
+            var authServer = "http://localhost/authorize";
+            var apiRoot = "http://localhost/yourapi/";
+            var accessTokenServer = "https://youracsnamespace-prod.accesscontrol.windows.net/v2/OAuth2-13/";
             
             var client = new SimpleOAuth2Client(new Uri(authServer), new Uri(accessTokenServer), clientId, clientSecret, scope, new Uri(redirectUri), ClientMode.TwoLegged);
             client.Authorize();
