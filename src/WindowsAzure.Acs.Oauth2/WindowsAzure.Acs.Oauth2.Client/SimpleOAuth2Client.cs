@@ -77,6 +77,15 @@ namespace WindowsAzure.Acs.Oauth2.Client
         protected DateTime LastAccessTokenRefresh { get; set; }
 
         /// <summary>
+        /// Gets or sets the mode.
+        /// </summary>
+        /// <value>
+        /// The client mode
+        /// </value>
+        protected ClientMode Mode { get; set; }
+
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="SimpleOAuth2Client"/> class.
         /// </summary>
         /// <param name="authorizeUri">The authorize URI.</param>
@@ -85,7 +94,8 @@ namespace WindowsAzure.Acs.Oauth2.Client
         /// <param name="clientSecret">The client secret.</param>
         /// <param name="scope">The scope.</param>
         /// <param name="redirectUri">The redirect URI.</param>
-        public SimpleOAuth2Client(Uri authorizeUri, Uri accessTokenUri, string clientId, string clientSecret, string scope, Uri redirectUri)
+        /// <param name="mode"></param>
+        public SimpleOAuth2Client(Uri authorizeUri, Uri accessTokenUri, string clientId, string clientSecret, string scope, Uri redirectUri, ClientMode mode = ClientMode.ThreeLegged)
         {
             if (authorizeUri == null) throw new ArgumentNullException("authorizeUri");
             if (accessTokenUri == null) throw new ArgumentNullException("accessTokenUri");
@@ -100,6 +110,7 @@ namespace WindowsAzure.Acs.Oauth2.Client
             ClientSecret = clientSecret;
             Scope = scope;
             RedirectUri = redirectUri;
+            Mode = mode;
         }
 
         /// <summary>
@@ -116,7 +127,19 @@ namespace WindowsAzure.Acs.Oauth2.Client
         /// Authorizes the specified refresh token.
         /// </summary>
         /// <param name="refreshToken">The refresh token.</param>
-        public void Authorize(string refreshToken)
+        public void Authorize(string refreshToken = null)
+        {
+            if (Mode == ClientMode.ThreeLegged || refreshToken != null)
+            {
+                AuthorizeWithACS(refreshToken);
+            }
+            else
+            {
+                AuthorizeTwoLegged();
+            }
+        }
+
+        private void AuthorizeWithACS(string refreshToken = null)
         {
             var authorizeRequest = BuildAccessTokenRequest(refreshToken);
 
@@ -132,11 +155,54 @@ namespace WindowsAzure.Acs.Oauth2.Client
 
             try
             {
-                var message = serializer.Read(httpWebRequest.GetResponse() as HttpWebResponse) as AccessTokenResponse;
+                var message =
+                    serializer.Read(httpWebRequest.GetResponse() as HttpWebResponse) as AccessTokenResponse;
                 if (message != null)
                 {
                     CurrentAccessToken = message;
                     LastAccessTokenRefresh = DateTime.UtcNow;
+                }
+            }
+            catch (WebException webex)
+            {
+                var message = serializer.Read(webex.Response as HttpWebResponse);
+
+                var endUserAuthorizationFailedResponse = message as EndUserAuthorizationFailedResponse;
+                if (endUserAuthorizationFailedResponse != null)
+                {
+                    throw new AuthenticationException(endUserAuthorizationFailedResponse.ErrorDescription);
+                }
+
+                var userAuthorizationFailedResponse = message as ResourceAccessFailureResponse;
+                if (userAuthorizationFailedResponse != null)
+                {
+                    throw new AuthenticationException(userAuthorizationFailedResponse.ErrorDescription);
+                }
+
+                throw;
+            }
+        }
+
+        private void AuthorizeTwoLegged()
+        {
+            var authorizeCodeRequest = BuildAuthorizationCodeRequest();
+
+            var serializer = new OAuthMessageSerializer();
+            var encodedQueryFormat = serializer.GetFormEncodedQueryFormat(authorizeCodeRequest);
+
+            HttpWebRequest httpWebRequest = WebRequest.Create(authorizeCodeRequest.BaseUri) as HttpWebRequest;
+            httpWebRequest.Method = "POST";
+            httpWebRequest.ContentType = "application/x-www-form-urlencoded";
+            StreamWriter streamWriter = new StreamWriter(httpWebRequest.GetRequestStream());
+            streamWriter.Write(encodedQueryFormat);
+            streamWriter.Close();
+
+            try
+            {
+                var message = serializer.Read(httpWebRequest.GetResponse() as HttpWebResponse) as EndUserAuthorizationResponse;
+                if (message != null)
+                {
+                    AuthorizeWithACS(message.Code);
                 }
             }
             catch (WebException webex)
@@ -178,17 +244,29 @@ namespace WindowsAzure.Acs.Oauth2.Client
             webRequest.Headers.Add(HttpRequestHeader.Authorization, "Bearer " + Convert.ToBase64String(Encoding.UTF8.GetBytes(CurrentAccessToken.AccessToken)));
         }
 
-        private AccessTokenRequestWithAuthorizationCode BuildAccessTokenRequest(string refreshToken)
+        private AccessTokenRequest BuildAccessTokenRequest(string refreshToken)
         {
             return new AccessTokenRequestWithAuthorizationCode(AccessTokenUri)
-                       {
-                           ClientId = ClientId,
-                           ClientSecret = ClientSecret,
-                           Scope = Scope,
-                           GrantType = "authorization_code",
-                           Code = refreshToken,
-                           RedirectUri = RedirectUri
-                       };
+            {
+                ClientId = ClientId,
+                ClientSecret = ClientSecret,
+                Scope = Scope,
+                GrantType = OAuthConstants.AccessGrantType.AuthorizationCode,
+                Code = refreshToken,
+                RedirectUri = RedirectUri
+            };
+        }
+
+        private AccessTokenRequest BuildAuthorizationCodeRequest()
+        {
+            return new AccessTokenRequest(AuthorizeUri)
+            {
+                ClientId = ClientId,
+                ClientSecret = ClientSecret,
+                Scope = Scope,
+                GrantType = OAuthConstants.AccessGrantType.ClientCredentials
+            };
+            
         }
     }
 }
