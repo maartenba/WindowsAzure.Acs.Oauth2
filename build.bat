@@ -16,4 +16,7 @@ REM Package
 mkdir Build
 src\WindowsAzure.Acs.Oauth2\.nuget\nuget.exe pack "src\WindowsAzure.Acs.Oauth2\WindowsAzure.Acs.Oauth2\WindowsAzure.Acs.Oauth2.csproj" -symbols -o Build -p Configuration=%config% %version%
 src\WindowsAzure.Acs.Oauth2\.nuget\nuget.exe pack "src\WindowsAzure.Acs.Oauth2\WindowsAzure.Acs.Oauth2.Client\WindowsAzure.Acs.Oauth2.Client.csproj" -symbols -o Build -p Configuration=%config% %version%
-src\WindowsAzure.Acs.Oauth2\.nuget\nuget.exe pack "src\WindowsAzure.Acs.Oauth2\WindowsAzure.Acs.Oauth2.Client.WinRT\WindowsAzure.Acs.Oauth2.Client.WinRT.csproj" -symbols -o Build -p Configuration=%config% %version%
+
+if not "%BuildRunner%" == "MyGet" (
+	src\WindowsAzure.Acs.Oauth2\.nuget\nuget.exe pack "src\WindowsAzure.Acs.Oauth2\WindowsAzure.Acs.Oauth2.Client.WinRT\WindowsAzure.Acs.Oauth2.Client.WinRT.csproj" -symbols -o Build -p Configuration=%config% %version%
+)
