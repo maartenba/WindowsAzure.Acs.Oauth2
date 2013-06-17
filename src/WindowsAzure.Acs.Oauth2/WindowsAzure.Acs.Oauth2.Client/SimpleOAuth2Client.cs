@@ -231,9 +231,21 @@ namespace WindowsAzure.Acs.Oauth2.Client
         /// <param name="webRequest">The web request.</param>
         public void AppendAccessTokenTo(HttpWebRequest webRequest)
         {
+            var token = GetAccessToken();
+
+            webRequest.Headers.Add(HttpRequestHeader.Authorization, token);
+        }
+
+        /// <summary>
+        /// Gets the access token.
+        /// </summary>
+        public string GetAccessToken()
+        {
             if (CurrentAccessToken == null)
             {
-                throw new ArgumentNullException("CurrentAccessToken is null. A call to Authorize() using an authorization or refresh token should be made first.", "CurrentAccessToken");
+                throw new ArgumentNullException(
+                    "CurrentAccessToken is null. A call to Authorize() using an authorization or refresh token should be made first.",
+                    "CurrentAccessToken");
             }
 
             if (DateTime.UtcNow.AddSeconds(-15) < LastAccessTokenRefresh.AddSeconds(CurrentAccessToken.ExpiresIn))
@@ -241,7 +253,8 @@ namespace WindowsAzure.Acs.Oauth2.Client
                 Authorize(CurrentAccessToken.RefreshToken);
             }
 
-            webRequest.Headers.Add(HttpRequestHeader.Authorization, "Bearer " + Convert.ToBase64String(Encoding.UTF8.GetBytes(CurrentAccessToken.AccessToken)));
+            var token = "Bearer " + Convert.ToBase64String(Encoding.UTF8.GetBytes(CurrentAccessToken.AccessToken));
+            return token;
         }
 
         private AccessTokenRequest BuildAccessTokenRequest(string refreshToken)
