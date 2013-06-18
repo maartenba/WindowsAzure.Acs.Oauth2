@@ -16,7 +16,7 @@ namespace $rootnamespace$.App_Start
         {
             if (ConfigurationManager.AppSettings["WindowsAzure.OAuth.RelyingPartyRealm"] != null && ConfigurationManager.AppSettings["WindowsAzure.OAuth.ServiceNamespace"] != null && ConfigurationManager.AppSettings["WindowsAzure.OAuth.SwtSigningKey"] != null)
             {
-                GlobalConfiguration.Configuration.MessageHandlers.Add(new OAuth2MessageHandler());
+                Microsoft.Web.Infrastructure.DynamicModuleHelper.DynamicModuleUtility.RegisterModule(typeof(AcsAuthenticationModule));
             }
             else
             {
