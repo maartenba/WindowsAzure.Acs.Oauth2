@@ -1,3 +1,9 @@
+Important note!
+===============
+
+While this library works perfectly with ACS, the Windows Azure Active Directory features described at http://blogs.technet.com/b/ad/archive/2013/07/12/securing-access-from-smart-client-apps-to-web-api-s-using-windows-azure-ad-and-oauth-2-0.aspx will probably be the way to go for your application. ACS hasn't been retired but I can imagine it will merge into the aforementioned platform.
+
+
 WindowsAzure.Acs.Oauth2
 =======================
 
