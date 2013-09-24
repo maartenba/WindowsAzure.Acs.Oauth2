@@ -379,7 +379,7 @@ namespace WindowsAzure.Acs.Oauth2
             var identityProvider = delegatedIdentity.IdentityProvider;
 
             var serviceIdentityId = serviceIdentity.Id;
-            var delegation = client.Delegations.Where(d => d.ServiceIdentityId == serviceIdentityId && d.RelyingPartyId == relyingPartyId && d.IdentityProvider == identityProvider && d.NameIdentifier == nameIdentifier).ToList().FirstOrDefault();
+            var delegation = client.Delegations.Where(d => d.ServiceIdentityId == serviceIdentityId && d.RelyingPartyId == relyingPartyId && d.IdentityProvider == identityProvider && d.NameIdentifier == nameIdentifier && d.Permissions == scope).ToList().FirstOrDefault();
             return delegation != null;
         }
 
@@ -409,7 +409,7 @@ namespace WindowsAzure.Acs.Oauth2
             var identityProvider = delegatedIdentity.IdentityProvider;
 
             var serviceIdentityId = serviceIdentity.Id;
-            var delegation = client.Delegations.Where(d => d.ServiceIdentityId == serviceIdentityId && d.RelyingPartyId == relyingPartyId && d.IdentityProvider == identityProvider && d.NameIdentifier == nameIdentifier).ToList().FirstOrDefault();
+            var delegation = client.Delegations.Where(d => d.ServiceIdentityId == serviceIdentityId && d.RelyingPartyId == relyingPartyId && d.IdentityProvider == identityProvider && d.NameIdentifier == nameIdentifier && d.Permissions == scope).ToList().FirstOrDefault();
             if (delegation == null)
             {
                 delegation = new Delegation()
