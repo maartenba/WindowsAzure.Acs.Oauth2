@@ -56,7 +56,7 @@ namespace WindowsAzure.Acs.Oauth2
                     return new AuthorizationServerIdentity()
                                {
                                    NameIdentifier = claimsIdentity.Claims.First(c => c.ClaimType == ClaimTypes.NameIdentifier).Value,
-                                   IdentityProvider = ""
+                                   IdentityProvider = claims.FirstOrDefault(c => c.Type == "http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider").Value;
                                };
                 }
 
