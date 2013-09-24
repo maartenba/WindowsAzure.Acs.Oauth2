@@ -53,10 +53,16 @@ namespace WindowsAzure.Acs.Oauth2
                 var claimsIdentity = User.Identity as ClaimsIdentity;
                 if (claimsIdentity != null)
                 {
+                    var identityProvider = "";
+                    var identityProviderClaim = claimsIdentity.Claims.FirstOrDefault(c => c.ClaimType == "http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider");
+                    if (identityProviderClaim != null && identityProviderClaim.Value != null)
+                    {
+                        identityProvider = identityProviderClaim.Value;
+                    }
                     return new AuthorizationServerIdentity()
                                {
                                    NameIdentifier = claimsIdentity.Claims.First(c => c.ClaimType == ClaimTypes.NameIdentifier).Value,
-                                   IdentityProvider = claims.FirstOrDefault(c => c.Type == "http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider").Value;
+                                   IdentityProvider = identityProvider
                                };
                 }
 
