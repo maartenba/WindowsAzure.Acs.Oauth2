@@ -5,7 +5,7 @@ namespace $rootnamespace$.Controllers
 {
     [Authorize]
     public class AuthorizeController
-        : AuthorizationServer
+        : ThreeLeggedAuthorizationServer
     {
     }
 }

@@ -16,7 +16,14 @@ namespace $rootnamespace$.App_Start
         {
             if (ConfigurationManager.AppSettings["WindowsAzure.OAuth.RelyingPartyRealm"] != null && ConfigurationManager.AppSettings["WindowsAzure.OAuth.ServiceNamespace"] != null && ConfigurationManager.AppSettings["WindowsAzure.OAuth.SwtSigningKey"] != null)
             {
-                Microsoft.Web.Infrastructure.DynamicModuleHelper.DynamicModuleUtility.RegisterModule(typeof(AcsAuthenticationModule));
+				try
+				{
+					Microsoft.Web.Infrastructure.DynamicModuleHelper.DynamicModuleUtility.RegisterModule(typeof(AcsAuthenticationModule));
+				}
+				catch (InvalidOperationException)
+				{
+					throw new ArgumentException("The AcsAuthenticationModule could not be registered for your application. Remove the AppStart_OAuth2API.cs file from your project and add the following entry under the system.webServer.httpModules section in Web.config: <add name=\"AcsAuthenticationModule\" type=\"WindowsAzure.Acs.Oauth2.ResourceServer.AcsAuthenticationModule, WindowsAzure.Acs.Oauth2\" />");
+				}
             }
             else
             {
