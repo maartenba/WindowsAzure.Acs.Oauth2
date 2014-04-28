@@ -3,7 +3,7 @@ using System.IO;
 using System.Net;
 using System.Security.Authentication;
 using System.Text;
-using WindowsAzure.Acs.Oauth2.Protocol;
+using WindowsAzure.Acs.Oauth2.Client.Protocol;
 
 namespace WindowsAzure.Acs.Oauth2.Client
 {
