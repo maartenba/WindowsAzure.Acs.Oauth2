@@ -14,10 +14,6 @@ namespace WindowsAzure.Acs.Oauth2.Protocol
             }
             set
             {
-                if (string.IsNullOrEmpty(value))
-                {
-                    throw new ArgumentNullException("value");
-                }
                 base.Parameters["code"] = value;
             }
         }
